@@ -22,7 +22,7 @@ public class Village {
 		
 		private void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
 			// TO DO 
-			if(etals[indiceEtal].isEtalOccupe()) {
+			if(!etals[indiceEtal].isEtalOccupe()) {
 				etals[indiceEtal].occuperEtal(vendeur,produit, nbProduit);
 			}
 		}
@@ -40,14 +40,14 @@ public class Village {
 			int nbEtalProduit=0;
 			for (int i = 0; i < etals.length; i++) {
 				if( etals[i].contientProduit(produit)) {
-					nbEtalProduit++;
+					nbEtalProduit++; //Nombre d'etals qui contiennent le produit
 				}
 			}
 			
-			Etal[] etalsProduit= new Etal[nbEtalProduit];
+			Etal[] etalsProduit= new Etal[nbEtalProduit]; // Cree un tableau de la taille voulu
 			int compt=0; 
-			for (int i = 0; i < etals.length && compt<nbEtalProduit ; i++) {
-					if( etals[i].contientProduit(produit)) {
+			for (int i = 0; i < etals.length ; i++) {
+					if(etals[i].contientProduit(produit)) {
 						etalsProduit[compt]=etals[i];
 						compt++;
 				 }
@@ -140,9 +140,10 @@ public class Village {
 		String retour;
 		retour=vendeur.getNom()+" cherche un endroit pour vendre "+ nbProduit+" "+produit+".\n";
 		int indice_etal=marche.trouverEtalLibre();
+		
 		if(indice_etal>=0) {
 			marche.utiliserEtal(indice_etal, vendeur, produit, nbProduit);
-			retour+="Le vendeur "+vendeur.getNom()+" vend des "+produit+" à l'étal n°"+indice_etal+1+"\n";
+			retour+="Le vendeur "+vendeur.getNom()+" vend des "+produit+" à l'étal n°"+(indice_etal+1)+"\n";
 		}
 		else {
 			retour+="Le vendeur "+vendeur.getNom()+" reviendra plus tard, quand une étal sera libre ... \n";
@@ -154,12 +155,18 @@ public class Village {
 		 Etal[] etalsProduit= marche.trouverEtals(produit);
 		 String retour;
 		 if(etalsProduit.length==0) {
-			 retour="Pas d'étal qui vende ce produit \n";
+			 retour="Il n'y a pas de vendeur qui propose des "+produit+ " au marché.\n";
 		 }
+
 		 else {
+			 if (etalsProduit.length==1) {
+				 retour="Seul le vendeur "+etalsProduit[0].getVendeur().getNom()+" propose des "+produit+" au marché.\n";
+			 }
+			 else {
 			 retour="Les vendeurs qui proposent des "+produit+" sont :\n";
 			 for (int i = 0; i < etalsProduit.length; i++) {
-				 retour+="- "+etalsProduit[i].getVendeur()+"\n";
+				 retour+="- "+etalsProduit[i].getVendeur().getNom()+"\n";
+			 }
 			}
 			
 		 }
